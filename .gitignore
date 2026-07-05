@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# Testing / coverage
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# ML artifacts
+*.pt
+*.onnx
+*.engine
+models/weights/
+
+# SUMO
+*.sumocfg.local
+sim/output/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Frontend (added in later modules)
+node_modules/
+frontend/dist/
+frontend/.next/

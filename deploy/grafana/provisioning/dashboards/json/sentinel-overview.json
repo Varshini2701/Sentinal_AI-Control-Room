@@ -1,0 +1,65 @@
+{
+  "title": "Sentinel AI - Overview",
+  "timezone": "browser",
+  "refresh": "5s",
+  "schemaVersion": 39,
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Safety Violations (must stay 0)",
+      "gridPos": { "h": 6, "w": 6, "x": 0, "y": 0 },
+      "targets": [
+        { "expr": "sum(sentinel_safety_violations_total)", "legendFormat": "violations" }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 1 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Decision Latency (p95)",
+      "gridPos": { "h": 6, "w": 9, "x": 6, "y": 0 },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(sentinel_decision_latency_seconds_bucket[1m])) by (le))",
+          "legendFormat": "p95"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Perception FPS",
+      "gridPos": { "h": 6, "w": 9, "x": 15, "y": 0 },
+      "targets": [
+        { "expr": "sentinel_perception_fps", "legendFormat": "{{intersection}}" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Events Published (rate)",
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 6 },
+      "targets": [
+        {
+          "expr": "sum(rate(sentinel_events_published_total[1m])) by (event_type)",
+          "legendFormat": "{{event_type}}"
+        }
+      ]
+    },
+    {
+      "type": "state-timeline",
+      "title": "Agent Health",
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 6 },
+      "targets": [
+        { "expr": "sentinel_agent_up", "legendFormat": "{{agent}}" }
+      ]
+    }
+  ]
+}

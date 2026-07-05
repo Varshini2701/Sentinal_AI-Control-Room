@@ -50,6 +50,13 @@ class TestApiGateway:
             assert response.status_code == 200
             assert isinstance(response.json(), list)
 
+    def test_metrics_endpoint_exposes_prometheus_format(self) -> None:
+        with TestClient(app) as client:
+            # Mounted ASGI apps require the trailing slash; see deploy/prometheus.yml.
+            response = client.get("/metrics/")
+            assert response.status_code == 200
+            assert "sentinel_agent_up" in response.text
+
     def test_websocket_streams_a_snapshot(self) -> None:
         with TestClient(app) as client, client.websocket_connect(
             "/api/v1/ws/live/intersection-1"

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Two edges per approach (inbound to centre, outbound from centre), one lane each. -->
+<edges>
+    <edge id="N_in"  from="N" to="C" numLanes="1" speed="13.89"/>
+    <edge id="N_out" from="C" to="N" numLanes="1" speed="13.89"/>
+    <edge id="S_in"  from="S" to="C" numLanes="1" speed="13.89"/>
+    <edge id="S_out" from="C" to="S" numLanes="1" speed="13.89"/>
+    <edge id="E_in"  from="E" to="C" numLanes="1" speed="13.89"/>
+    <edge id="E_out" from="C" to="E" numLanes="1" speed="13.89"/>
+    <edge id="W_in"  from="W" to="C" numLanes="1" speed="13.89"/>
+    <edge id="W_out" from="C" to="W" numLanes="1" speed="13.89"/>
+</edges>

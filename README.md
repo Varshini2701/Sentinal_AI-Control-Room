@@ -87,7 +87,8 @@ Then run the full app (agent fleet + read-API + live dashboard):
 
 ```bash
 uvicorn services.api_gateway.main:app --reload
-# open http://localhost:8000
+# open http://localhost:8000            the dashboard
+# open http://localhost:8000/metrics/   Prometheus-format metrics (trailing slash required)
 ```
 
 ## Quality
@@ -107,7 +108,9 @@ docker compose -f deploy/docker-compose.yml up --build
 
 Brings up the API gateway (agent fleet + dashboard, in-memory bus by default) plus RabbitMQ,
 Redis, Postgres, Prometheus and Grafana (`admin`/`admin`). Open `http://localhost:8000` for the
-dashboard, `http://localhost:9090` for Prometheus, `http://localhost:3000` for Grafana.
+dashboard, `http://localhost:9090` for Prometheus, `http://localhost:3000` for Grafana (a
+pre-provisioned "Sentinel AI - Overview" dashboard is loaded automatically, tracking safety
+violations, decision latency, perception FPS and agent health).
 
 > **Scope note:** the API gateway runs a single-process, single-intersection fleet on the
 > in-memory event bus (`sentinel.fleet.build_fleet`) — the right choice for the analytical-twin

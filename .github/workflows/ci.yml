@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-typecheck-test:
+    name: Lint, typecheck & test (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install package (dev + api extras)
+        run: pip install -e ".[dev,api]"
+
+      - name: Ruff (lint)
+        run: ruff check libs tests
+
+      - name: Mypy (type check)
+        run: mypy libs
+
+      - name: Pytest (with coverage)
+        run: pytest --cov=sentinel --cov-report=term-missing --cov-report=xml
+
+      - name: Upload coverage report
+        if: matrix.python-version == '3.12'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-xml
+          path: coverage.xml
+
+  docker-build:
+    name: Build API gateway image
+    runs-on: ubuntu-latest
+    needs: lint-typecheck-test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image (no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: deploy/Dockerfile.api_gateway
+          push: false
+          tags: sentinel-api-gateway:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

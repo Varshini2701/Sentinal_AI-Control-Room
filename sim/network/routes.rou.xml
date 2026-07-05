@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Asymmetric demand: heavy North<->South, light East<->West. Mirrors the analytical
+     benchmark scenario so SUMO and the analytical twin tell the same story. -->
+<routes>
+    <vType id="car" accel="2.6" decel="4.5" length="5.0" minGap="2.0" maxSpeed="13.89"/>
+
+    <route id="ns" edges="N_in S_out"/>
+    <route id="sn" edges="S_in N_out"/>
+    <route id="ew" edges="E_in W_out"/>
+    <route id="we" edges="W_in E_out"/>
+
+    <flow id="f_ns" type="car" route="ns" begin="0" end="3600" vehsPerHour="720"/>
+    <flow id="f_sn" type="car" route="sn" begin="0" end="3600" vehsPerHour="720"/>
+    <flow id="f_ew" type="car" route="ew" begin="0" end="3600" vehsPerHour="180"/>
+    <flow id="f_we" type="car" route="we" begin="0" end="3600" vehsPerHour="180"/>
+</routes>

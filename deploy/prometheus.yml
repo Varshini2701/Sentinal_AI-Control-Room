@@ -1,0 +1,9 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  - job_name: sentinel-api-gateway
+    static_configs:
+      - targets: ["api-gateway:8000"]
+    metrics_path: /metrics/

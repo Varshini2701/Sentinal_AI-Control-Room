@@ -1,0 +1,36 @@
+# Sentinel AI API gateway -- runs the full cognition-plane agent fleet + read-API + WebSocket.
+#
+# This image is what runs on the GPU host in the hybrid deployment (Vercel serves the static
+# frontend + proxies to this backend; see deploy/vercel.json and the root README). It does not
+# require a GPU itself -- the analytical traffic twin is pure CPU -- but the perception worker
+# (wired in the same way once real camera ingestion lands) does, hence "GPU host" in the design.
+#
+# Build from the repo root:
+#   docker build -f deploy/Dockerfile.api_gateway -t sentinel-api-gateway .
+# Or via docker-compose (recommended): docker compose -f deploy/docker-compose.yml up
+
+FROM python:3.11-slim AS base
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1
+
+WORKDIR /app
+
+# Install the package with the API extra only -- perception's heavy ML deps (torch, ultralytics,
+# opencv) are a separate image concern and are not needed to serve the read-API + agent fleet.
+COPY pyproject.toml README.md ./
+COPY libs ./libs
+RUN pip install --no-cache-dir ".[api]"
+
+COPY services ./services
+COPY frontend ./frontend
+
+RUN useradd --create-home --uid 1000 sentinel && chown -R sentinel:sentinel /app
+USER sentinel
+
+EXPOSE 8000 9100
+HEALTHCHECK --interval=15s --timeout=5s --start-period=10s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/system/health', timeout=3)" || exit 1
+
+CMD ["uvicorn", "services.api_gateway.main:app", "--host", "0.0.0.0", "--port", "8000"]
