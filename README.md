@@ -119,6 +119,21 @@ violations, decision latency, perception FPS and agent health).
 > `RedisStreamBus` for a distributed, multi-service deployment is a configuration change, not a
 > new architecture.
 
+### Streamlit (single-command, all-in-one)
+
+Unlike Vercel, Streamlit runs one persistent Python process per app — a genuine fit for this
+system's long-running agent fleet and in-memory state, with no split-backend needed.
+
+```bash
+pip install -e ".[streamlit]"
+streamlit run streamlit_app.py
+```
+
+**Deploying on [Streamlit Community Cloud](https://share.streamlit.io):** point it at this repo
+with main file `streamlit_app.py` (repo root) — it installs from `requirements.txt`
+automatically. No other configuration needed; the fleet starts itself on first load via
+`st.cache_resource`.
+
 ### Hybrid cloud deployment (Vercel + GPU host)
 
 1. **Backend** — build and push `deploy/Dockerfile.api_gateway` to your GPU host (RunPod, Fly

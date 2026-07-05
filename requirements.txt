@@ -1,0 +1,4 @@
+# Used by Streamlit Community Cloud, which installs from requirements.txt at the repo root.
+# Installs this package (editable) with the streamlit extra; core deps (pydantic, structlog,
+# prometheus-client) come from pyproject.toml's [project.dependencies].
+-e .[streamlit]
