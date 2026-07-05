@@ -1,0 +1,21 @@
+# Render.com Blueprint for the Sentinel AI API gateway (backend for the Vercel-hosted dashboard).
+#
+# Deploy: https://dashboard.render.com/blueprints -> New Blueprint Instance -> select this repo.
+# Render reads this file automatically and provisions the service below.
+#
+# After it deploys, copy its URL (e.g. https://sentinel-api-gateway.onrender.com) into
+# frontend/vercel.json in place of YOUR_BACKEND_HOST.
+
+services:
+  - type: web
+    name: sentinel-api-gateway
+    runtime: docker
+    dockerfilePath: ./deploy/Dockerfile.api_gateway
+    dockerContext: .
+    plan: free
+    healthCheckPath: /api/v1/system/health
+    envVars:
+      - key: SENTINEL_ENVIRONMENT
+        value: production
+      - key: SENTINEL_OBS__LOG_JSON
+        value: "true"
