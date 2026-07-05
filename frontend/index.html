@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sentinel AI Control Room</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Intersection-1</p>
+          <h1>Sentinel AI Control Room</h1>
+        </div>
+        <div class="topbar-actions" aria-label="Simulation controls">
+          <button id="run-toggle" class="primary-action" type="button" aria-pressed="true">
+            <span class="icon" aria-hidden="true">II</span>
+            <span id="run-label">Pause</span>
+          </button>
+          <button id="reset" type="button">
+            <span class="icon" aria-hidden="true">R</span>
+            Reset
+          </button>
+          <button id="demo-mode" type="button" aria-pressed="false">
+            <span class="icon" aria-hidden="true">D</span>
+            Demo
+          </button>
+        </div>
+      </header>
+
+      <section class="status-strip" aria-label="Current status">
+        <article>
+          <span>Mode</span>
+          <strong id="mode-label">AI adaptive</strong>
+        </article>
+        <article>
+          <span>Signal</span>
+          <strong id="phase-label">NS green</strong>
+        </article>
+        <article>
+          <span>Average wait</span>
+          <strong><span id="avg-wait">0.0</span>s</strong>
+        </article>
+        <article>
+          <span>Queue</span>
+          <strong><span id="total-queue">0</span> vehicles</strong>
+        </article>
+        <article>
+          <span>Reduction</span>
+          <strong><span id="reduction">0</span>%</strong>
+        </article>
+      </section>
+
+      <section class="workspace">
+        <div class="intersection-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Live twin</p>
+              <h2>Signal plan and lane load</h2>
+            </div>
+            <div class="time-pill">t <span id="sim-time">0</span>s</div>
+          </div>
+
+          <div class="intersection-stage" aria-label="Intersection simulation">
+            <div class="road road-vertical"></div>
+            <div class="road road-horizontal"></div>
+            <div class="crosswalk crosswalk-n"></div>
+            <div class="crosswalk crosswalk-s"></div>
+            <div class="crosswalk crosswalk-e"></div>
+            <div class="crosswalk crosswalk-w"></div>
+            <div class="junction-core">
+              <span id="core-phase">NS</span>
+            </div>
+            <div class="signal signal-n" data-axis="ns"></div>
+            <div class="signal signal-s" data-axis="ns"></div>
+            <div class="signal signal-e" data-axis="ew"></div>
+            <div class="signal signal-w" data-axis="ew"></div>
+            <div id="lane-north" class="lane lane-north"></div>
+            <div id="lane-south" class="lane lane-south"></div>
+            <div id="lane-east" class="lane lane-east"></div>
+            <div id="lane-west" class="lane lane-west"></div>
+          </div>
+
+          <div class="lane-grid" aria-label="Lane metrics">
+            <article class="lane-card" data-dir="north">
+              <span>North</span>
+              <strong id="north-count">0</strong>
+              <small id="north-wait">0s wait</small>
+              <div class="meter"><i id="north-meter"></i></div>
+            </article>
+            <article class="lane-card" data-dir="south">
+              <span>South</span>
+              <strong id="south-count">0</strong>
+              <small id="south-wait">0s wait</small>
+              <div class="meter"><i id="south-meter"></i></div>
+            </article>
+            <article class="lane-card" data-dir="east">
+              <span>East</span>
+              <strong id="east-count">0</strong>
+              <small id="east-wait">0s wait</small>
+              <div class="meter"><i id="east-meter"></i></div>
+            </article>
+            <article class="lane-card" data-dir="west">
+              <span>West</span>
+              <strong id="west-count">0</strong>
+              <small id="west-wait">0s wait</small>
+              <div class="meter"><i id="west-meter"></i></div>
+            </article>
+          </div>
+        </div>
+
+        <aside class="control-panel">
+          <section>
+            <div class="panel-heading compact">
+              <div>
+                <p class="eyebrow">Policy</p>
+                <h2>Controller</h2>
+              </div>
+            </div>
+            <div class="segmented" role="group" aria-label="Controller mode">
+              <button class="active" type="button" data-mode="adaptive">Adaptive</button>
+              <button type="button" data-mode="fixed">Fixed</button>
+              <button type="button" data-mode="degraded">Degraded</button>
+            </div>
+          </section>
+
+          <section>
+            <div class="panel-heading compact">
+              <div>
+                <p class="eyebrow">Demand</p>
+                <h2>Traffic load</h2>
+              </div>
+            </div>
+            <label>
+              North/South
+              <input id="ns-demand" type="range" min="4" max="30" value="22" />
+              <output id="ns-demand-out">0.22 veh/s</output>
+            </label>
+            <label>
+              East/West
+              <input id="ew-demand" type="range" min="2" max="24" value="5" />
+              <output id="ew-demand-out">0.05 veh/s</output>
+            </label>
+            <label>
+              Speed
+              <input id="speed" type="range" min="1" max="10" value="4" />
+              <output id="speed-out">4x</output>
+            </label>
+            <label class="switch-row">
+              Emergency route
+              <input id="emergency" type="checkbox" />
+            </label>
+          </section>
+
+          <section>
+            <div class="panel-heading compact">
+              <div>
+                <p class="eyebrow">Hackathon</p>
+                <h2>Scenarios</h2>
+              </div>
+            </div>
+            <div class="scenario-grid" aria-label="Scenario presets">
+              <button type="button" data-scenario="rush">Rush hour</button>
+              <button type="button" data-scenario="event">Event surge</button>
+              <button type="button" data-scenario="emergency">Emergency</button>
+              <button type="button" data-scenario="failure">Sensor drop</button>
+            </div>
+          </section>
+
+          <section class="decision-box">
+            <div class="panel-heading compact">
+              <div>
+                <p class="eyebrow">Decision</p>
+                <h2 id="decision-action">Keep green</h2>
+              </div>
+            </div>
+            <p id="decision-copy">Holding north/south while demand is highest.</p>
+            <dl>
+              <div>
+                <dt>Policy</dt>
+                <dd id="policy-version">adaptive-lqf-v1</dd>
+              </div>
+              <div>
+                <dt>Reason</dt>
+                <dd id="reason-code">current_lane_busiest</dd>
+              </div>
+            </dl>
+          </section>
+        </aside>
+      </section>
+
+      <section class="lower-grid">
+        <article class="benchmark-panel">
+          <div class="panel-heading compact">
+            <div>
+              <p class="eyebrow">Benchmark</p>
+              <h2>Adaptive vs fixed timer</h2>
+            </div>
+          </div>
+          <div class="bars">
+            <div>
+              <span>Fixed</span>
+              <b id="fixed-wait">49.1s</b>
+              <i id="fixed-bar"></i>
+            </div>
+            <div>
+              <span>Sentinel</span>
+              <b id="adaptive-wait">16.0s</b>
+              <i id="adaptive-bar"></i>
+            </div>
+          </div>
+        </article>
+
+        <article class="event-panel">
+          <div class="panel-heading compact">
+            <div>
+              <p class="eyebrow">Audit</p>
+              <h2>Event stream</h2>
+            </div>
+          </div>
+          <ol id="events"></ol>
+        </article>
+
+        <article class="scorecard-panel">
+          <div class="panel-heading compact">
+            <div>
+              <p class="eyebrow">Judging</p>
+              <h2>Impact scorecard</h2>
+            </div>
+          </div>
+          <div class="score-grid">
+            <div>
+              <span>Safety</span>
+              <strong id="safety-score">100</strong>
+              <small>clearance protected</small>
+            </div>
+            <div>
+              <span>Explainability</span>
+              <strong id="explain-score">92</strong>
+              <small>decision trace live</small>
+            </div>
+            <div>
+              <span>Resilience</span>
+              <strong id="resilience-score">88</strong>
+              <small>fallback ready</small>
+            </div>
+          </div>
+        </article>
+
+        <article class="pitch-panel">
+          <div class="panel-heading compact">
+            <div>
+              <p class="eyebrow">Pitch</p>
+              <h2>One-minute story</h2>
+            </div>
+            <button id="copy-pitch" type="button">Copy</button>
+          </div>
+          <textarea id="pitch-summary" readonly></textarea>
+        </article>
+      </section>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>

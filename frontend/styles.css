@@ -1,0 +1,677 @@
+:root {
+  color-scheme: light;
+  --ink: #17211b;
+  --muted: #68746d;
+  --line: #d8dfd8;
+  --panel: #ffffff;
+  --bg: #eef2ec;
+  --road: #2f3737;
+  --road-line: #edf1e8;
+  --green: #2f9d62;
+  --yellow: #d5a51f;
+  --red: #ce4f44;
+  --blue: #2f6f9f;
+  --teal: #1e8f83;
+  --purple: #7658a8;
+  --shadow: 0 18px 50px rgba(23, 33, 27, 0.12);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  border: 1px solid var(--line);
+  background: #f9fbf7;
+  color: var(--ink);
+  min-height: 40px;
+  border-radius: 8px;
+  padding: 0 14px;
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: #aebaae;
+}
+
+.app-shell {
+  width: min(1440px, 100%);
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.topbar,
+.status-strip,
+.workspace,
+.lower-grid {
+  width: 100%;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.topbar h1,
+.panel-heading h2 {
+  margin: 0;
+  letter-spacing: 0;
+}
+
+.topbar h1 {
+  font-size: clamp(1.45rem, 2vw, 2.2rem);
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.topbar-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.primary-action {
+  background: var(--ink);
+  color: white;
+  border-color: var(--ink);
+}
+
+.active-demo {
+  background: var(--purple);
+  border-color: var(--purple);
+  color: white;
+}
+
+.icon {
+  display: inline-flex;
+  width: 18px;
+  justify-content: center;
+  margin-right: 6px;
+  font-weight: 900;
+}
+
+.status-strip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--line);
+  box-shadow: var(--shadow);
+}
+
+.status-strip article {
+  background: var(--panel);
+  padding: 16px;
+  min-width: 0;
+}
+
+.status-strip span,
+.lane-card span,
+.bars span,
+dt {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.status-strip strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 1.05rem;
+  white-space: nowrap;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.intersection-panel,
+.control-panel,
+.benchmark-panel,
+.event-panel,
+.scorecard-panel,
+.pitch-panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.intersection-panel {
+  padding: 18px;
+}
+
+.panel-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.panel-heading h2 {
+  font-size: 1.1rem;
+}
+
+.compact {
+  margin-bottom: 12px;
+}
+
+.time-pill {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 12px;
+  color: var(--muted);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.intersection-stage {
+  position: relative;
+  min-height: 520px;
+  border: 1px solid #cbd4ce;
+  border-radius: 8px;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.24) 1px, transparent 1px),
+    linear-gradient(rgba(255,255,255,0.24) 1px, transparent 1px),
+    #9cad97;
+  background-size: 28px 28px;
+}
+
+.road {
+  position: absolute;
+  background: var(--road);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+}
+
+.road-vertical {
+  width: 31%;
+  height: 100%;
+  left: 34.5%;
+  top: 0;
+}
+
+.road-horizontal {
+  height: 31%;
+  width: 100%;
+  left: 0;
+  top: 34.5%;
+}
+
+.road-vertical::before,
+.road-horizontal::before {
+  content: "";
+  position: absolute;
+  border-color: var(--road-line);
+  opacity: 0.72;
+}
+
+.road-vertical::before {
+  inset: 0 50%;
+  border-left: 2px dashed var(--road-line);
+}
+
+.road-horizontal::before {
+  inset: 50% 0;
+  border-top: 2px dashed var(--road-line);
+}
+
+.crosswalk {
+  position: absolute;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255,255,255,0.85) 0 5px,
+    transparent 5px 11px
+  );
+  opacity: 0.75;
+}
+
+.crosswalk-n,
+.crosswalk-s {
+  left: 34.5%;
+  width: 31%;
+  height: 16px;
+}
+
+.crosswalk-n { top: 31%; }
+.crosswalk-s { bottom: 31%; }
+
+.crosswalk-e,
+.crosswalk-w {
+  top: 34.5%;
+  height: 31%;
+  width: 16px;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255,255,255,0.85) 0 5px,
+    transparent 5px 11px
+  );
+}
+
+.crosswalk-e { right: 31%; }
+.crosswalk-w { left: 31%; }
+
+.junction-core {
+  position: absolute;
+  left: 38%;
+  top: 38%;
+  width: 24%;
+  height: 24%;
+  border-radius: 8px;
+  background: #3a4241;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-weight: 900;
+  font-size: 1.6rem;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
+}
+
+.signal {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 3px solid #1f2726;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
+}
+
+.signal.green { background: var(--green); }
+.signal.yellow { background: var(--yellow); }
+.signal-n { left: 32%; top: 30%; }
+.signal-s { right: 32%; bottom: 30%; }
+.signal-e { right: 30%; top: 32%; }
+.signal-w { left: 30%; bottom: 32%; }
+
+.lane {
+  position: absolute;
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap-reverse;
+  align-content: flex-start;
+  pointer-events: none;
+}
+
+.lane-north,
+.lane-south {
+  width: 12%;
+  height: 30%;
+  left: 44%;
+}
+
+.lane-north {
+  top: 0;
+}
+
+.lane-south {
+  bottom: 0;
+  flex-wrap: wrap;
+  align-content: flex-end;
+}
+
+.lane-east,
+.lane-west {
+  height: 12%;
+  width: 30%;
+  top: 44%;
+}
+
+.lane-east {
+  right: 0;
+  align-content: center;
+}
+
+.lane-west {
+  left: 0;
+  justify-content: flex-end;
+  align-content: center;
+}
+
+.car {
+  width: 18px;
+  height: 28px;
+  border-radius: 5px;
+  background: var(--blue);
+  border: 2px solid rgba(255,255,255,0.45);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.22);
+}
+
+.lane-east .car,
+.lane-west .car {
+  width: 28px;
+  height: 18px;
+}
+
+.car.alt { background: var(--teal); }
+.car.hot { background: var(--purple); }
+.car.emergency { background: var(--red); }
+
+.lane-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.lane-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.lane-card strong {
+  display: block;
+  margin: 6px 0 2px;
+  font-size: 1.6rem;
+}
+
+.lane-card small {
+  color: var(--muted);
+}
+
+.meter {
+  height: 8px;
+  margin-top: 10px;
+  background: #e6ece4;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.meter i {
+  display: block;
+  width: 0%;
+  height: 100%;
+  background: var(--green);
+}
+
+.control-panel {
+  display: grid;
+  gap: 1px;
+  overflow: hidden;
+  background: var(--line);
+}
+
+.control-panel section {
+  background: var(--panel);
+  padding: 16px;
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.segmented button {
+  min-width: 0;
+  padding-inline: 8px;
+}
+
+.segmented .active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: white;
+}
+
+.scenario-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.scenario-grid button {
+  padding-inline: 8px;
+}
+
+label {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 12px;
+  align-items: center;
+  margin: 12px 0;
+  color: var(--ink);
+  font-weight: 800;
+}
+
+label output {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+input[type="range"] {
+  grid-column: 1 / -1;
+  width: 100%;
+  accent-color: var(--blue);
+}
+
+.switch-row {
+  grid-template-columns: 1fr auto;
+}
+
+.switch-row input {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--red);
+}
+
+.decision-box p {
+  color: var(--muted);
+  line-height: 1.45;
+  min-height: 42px;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin: 0;
+}
+
+dl div {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+dd {
+  margin: 2px 0 0;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.lower-grid {
+  display: grid;
+  grid-template-columns: 420px minmax(0, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.benchmark-panel,
+.event-panel,
+.scorecard-panel,
+.pitch-panel {
+  padding: 16px;
+}
+
+.bars {
+  display: grid;
+  gap: 14px;
+}
+
+.bars div {
+  display: grid;
+  grid-template-columns: 80px 64px 1fr;
+  align-items: center;
+  gap: 10px;
+}
+
+.bars i {
+  display: block;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--red);
+  min-width: 5%;
+}
+
+#adaptive-bar {
+  background: var(--green);
+}
+
+#events {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 174px;
+  overflow: auto;
+}
+
+#events li {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 8px;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+  color: var(--muted);
+}
+
+#events b {
+  color: var(--ink);
+}
+
+.scorecard-panel {
+  grid-column: 1 / 2;
+}
+
+.pitch-panel {
+  grid-column: 2 / 3;
+}
+
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.score-grid div {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  min-width: 0;
+}
+
+.score-grid span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.score-grid strong {
+  display: block;
+  margin: 6px 0 2px;
+  font-size: 1.8rem;
+}
+
+.score-grid small {
+  color: var(--muted);
+}
+
+textarea {
+  display: block;
+  width: 100%;
+  min-height: 132px;
+  resize: vertical;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  color: var(--ink);
+  background: #fbfcfa;
+  line-height: 1.45;
+}
+
+@media (max-width: 980px) {
+  .workspace,
+  .lower-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .scorecard-panel,
+  .pitch-panel {
+    grid-column: auto;
+  }
+
+  .status-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .intersection-stage {
+    min-height: 420px;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-shell {
+    padding: 12px;
+  }
+
+  .topbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .topbar-actions {
+    justify-content: stretch;
+  }
+
+  .topbar-actions button {
+    flex: 1;
+  }
+
+  .lane-grid,
+  .status-strip,
+  .score-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .intersection-stage {
+    min-height: 340px;
+  }
+
+  .bars div {
+    grid-template-columns: 72px 58px 1fr;
+  }
+}

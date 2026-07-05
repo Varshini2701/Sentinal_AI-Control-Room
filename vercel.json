@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "rewrites": [
+    {"source": "/demo/view", "destination": "/api/demo/view"},
+    {"source": "/", "destination": "/frontend/index.html"},
+    {"source": "/styles.css", "destination": "/frontend/styles.css"},
+    {"source": "/app.js", "destination": "/frontend/app.js"},
+    {"source": "/(.*)", "destination": "/frontend/$1"}
+  ]
+}
